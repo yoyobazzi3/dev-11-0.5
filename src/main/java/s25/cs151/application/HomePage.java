@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
@@ -86,11 +88,20 @@ public class HomePage {
             if (thursdayCheckBox.isSelected()) model.addSelectedDay("Thursday");
             if (fridayCheckBox.isSelected()) model.addSelectedDay("Friday");
 
-            // Save to CSV
-            saveToCSV(model);
-
-            // Show confirmation
-            showAlert("Success", "Data saved successfully!");
+            // Check if required fields have input, check for duplicates, save to CSV and show confirmation
+            if (model.getYear() == null || model.getYear().isEmpty()){
+                showAlert("Empty Entry", "Muster enter a year.");
+            }
+            else if (model.getSelectedDays() == null || model.getSelectedDays().isEmpty()){
+                showAlert("Empty Entry", "Must select a day.");
+            }
+            else if (!isDuplicate(model)) {
+                showAlert("Duplicate Entry", "This entry already exists.");
+            }
+            else {
+                saveToCSV(model);
+                showAlert("Success", "Data saved successfully!");
+            }
         });
         pane.add(saveButton, 0, 5);
 
@@ -130,5 +141,33 @@ public class HomePage {
 
     public static Model getModel() {
         return model;
+    }
+
+    private static boolean isDuplicate(Model model) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("office_hours_data.csv"))) {
+            String line;
+            boolean isHeader = true;
+            while ((line = reader.readLine()) != null) {
+                if (isHeader) {
+                    // Skip the header line
+                    isHeader = false;
+                    continue;
+                }
+                // Split CSV line into components
+                String[] parts = line.split(",");
+
+                // Check duplicates of only semester and year combinations
+                String semester = parts[0];
+                String year = parts[1];
+
+                if (model.getSemester().equals(semester) && model.getYear().equals(year)){
+                    return false;
+                }
+            }
+        } catch (IOException e) {
+            Label errorLabel = new Label("Duplicate Entry.");
+            errorLabel.setStyle("-fx-font-size: 16px;");
+        }
+        return true;
     }
 }
