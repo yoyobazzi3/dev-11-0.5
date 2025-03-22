@@ -4,8 +4,8 @@
 # who did what:
 1. Youssef Bazzi: Display the office hours schedule in the frontend
 2. 
-3. 
-3. 
+3. Patrick Luong: Functions to check for correct entry in HomePage
+4. 
 
 
 # Any other instruction that users need to know:
