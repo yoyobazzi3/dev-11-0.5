@@ -4,8 +4,8 @@
 # who did what:
 1. Youssef Bazzi: Display the office hours schedule in the frontend
 2. 
-3. Patrick Luong: Functions to check for correct entry in HomePage and descending order table
-4. 
+3. Patrick Luong: Functions to check for correct entry in HomePage
+4. Felix Vo: Added more functions for entry verfication
 
 
 # Any other instruction that users need to know:
