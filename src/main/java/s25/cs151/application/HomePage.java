@@ -90,7 +90,7 @@ public class HomePage {
 
             // Check if required fields have input, check for duplicates, save to CSV and show confirmation
             if (model.getYear() == null || model.getYear().isEmpty()){
-                showAlert("Empty Entry", "Muster enter a year.");
+                showAlert("Empty Entry", "Must enter a year.");
             }
             else if (model.getSelectedDays() == null || model.getSelectedDays().isEmpty()){
                 showAlert("Empty Entry", "Must select a day.");
