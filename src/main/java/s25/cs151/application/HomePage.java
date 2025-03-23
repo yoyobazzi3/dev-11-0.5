@@ -110,7 +110,7 @@ public class HomePage {
         backButton.setOnAction(e -> stage.setScene(LandingPage.createScene(stage)));
         pane.add(backButton, 1, 5);
 
-        return new Scene(pane, 800, 600);
+        return new Scene(pane, 1250, 750);
     }
 
     private static void saveToCSV(Model model) {
@@ -118,7 +118,7 @@ public class HomePage {
         try (FileWriter writer = new FileWriter(csvFile, true)) { // Append mode
             // Write header if file is empty
             if (model.getSemester() != null && model.getYear() != null && !model.getSelectedDays().isEmpty()) {
-                writer.append("Semester,Year,Days\n");
+                // writer.append("Semester,Year,Days\n");
             }
 
             // Write data
