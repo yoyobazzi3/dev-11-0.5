@@ -74,14 +74,14 @@ public class LandingPage {
         tableView.setItems(data);
 
         // This section sorts the tables
-        semesterColumn.setSortable(true);
         yearColumn.setSortable(true);
+        semesterColumn.setSortable(true);
 
-        semesterColumn.setSortType(TableColumn.SortType.DESCENDING);
         yearColumn.setSortType(TableColumn.SortType.DESCENDING);
+        semesterColumn.setSortType(TableColumn.SortType.DESCENDING);
 
-        tableView.getSortOrder().add(semesterColumn);
         tableView.getSortOrder().add(yearColumn);
+        tableView.getSortOrder().add(semesterColumn);
 
         // Date Picker
         DatePicker datePicker = new DatePicker(LocalDate.now());
