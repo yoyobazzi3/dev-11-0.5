@@ -4,7 +4,7 @@
 # who did what:
 1. Youssef Bazzi: Display the office hours schedule in the frontend
 2. 
-3. Patrick Luong: Functions to check for correct entry in HomePage
+3. Patrick Luong: Functions to check for correct entry in HomePage and descending order table
 4. 
 
 
