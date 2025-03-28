@@ -9,18 +9,20 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class TimeSlotsPage {
     private static ObservableList<TimeSlot> timeSlots = FXCollections.observableArrayList();
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     public static Scene createScene(Stage stage) {
         VBox mainLayout = new VBox(20);
         mainLayout.setPadding(new Insets(20));
 
         // Title
-        Label titleLabel = new Label("Define Semester's Time Slots");
+        Label titleLabel = new Label("Define Semester's Office Hours");
         titleLabel.setStyle("-fx-font-size: 24px;");
 
         // Form for adding time slots
@@ -43,7 +45,32 @@ public class TimeSlotsPage {
         addButton.setOnAction(e -> {
             String fromTime = String.format("%02d:%02d", fromHourSpinner.getValue(), fromMinuteSpinner.getValue());
             String toTime = String.format("%02d:%02d", toHourSpinner.getValue(), toMinuteSpinner.getValue());
-            timeSlots.add(new TimeSlot(fromTime, toTime));
+
+            try {
+                LocalTime start = LocalTime.parse(fromTime, TIME_FORMATTER);
+                LocalTime end = LocalTime.parse(toTime, TIME_FORMATTER);
+
+                if (!end.isAfter(start)) {
+                    showAlert("Invalid Time", "End time must be after start time.");
+                    return;
+                }
+
+                // Check for overlapping time slots
+                for (TimeSlot slot : timeSlots) {
+                    LocalTime existingStart = LocalTime.parse(slot.getFromTime(), TIME_FORMATTER);
+                    LocalTime existingEnd = LocalTime.parse(slot.getToTime(), TIME_FORMATTER);
+
+                    if ((start.isBefore(existingEnd) && end.isAfter(existingStart))) {
+                        showAlert("Overlap Detected", "This time slot overlaps with an existing one.");
+                        return;
+                    }
+                }
+
+                timeSlots.add(new TimeSlot(fromTime, toTime));
+
+            } catch (DateTimeParseException ex) {
+                showAlert("Invalid Time", "Please enter valid times in HH:MM format.");
+            }
         });
 
         formPane.add(fromLabel, 0, 0);

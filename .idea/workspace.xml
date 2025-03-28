@@ -5,19 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="73d45499-7ed0-41b7-b6e3-4d72e0a54fa3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/CoursesPage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/TimeSlotsPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReadMe.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ReadMe.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/office_hours_data.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_hours_data.csv" beforeDir="false" afterPath="$PROJECT_DIR$/office_hours_data.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/HomePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/HomePage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/LandingPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/LandingPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/TimeSlotsPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/TimeSlotsPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/s25/cs151/application/HomePage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/s25/cs151/application/HomePage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/s25/cs151/application/LandingPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/s25/cs151/application/LandingPage.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,22 +35,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "yb-v-0.5",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/youssefbazzi/Downloads/dev-11-0.5",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;yb-v-0.5&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/youssefbazzi/Downloads/dev-11-0.5&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -81,6 +74,8 @@
       <workItem from="1743179124618" duration="35000" />
       <workItem from="1743179240143" duration="735000" />
       <workItem from="1743191117424" duration="321000" />
+      <workItem from="1743193953839" duration="321000" />
+      <workItem from="1743194278077" duration="1056000" />
     </task>
     <servers />
   </component>
