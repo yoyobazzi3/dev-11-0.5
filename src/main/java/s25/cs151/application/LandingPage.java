@@ -86,12 +86,22 @@ public class LandingPage {
         // Date Picker
         DatePicker datePicker = new DatePicker(LocalDate.now());
 
-        // Home Button
+        // Navigation Buttons
         Button homeButton = new Button("Go to Homepage");
         homeButton.setOnAction(e -> stage.setScene(HomePage.createScene(stage)));
 
+        Button timeSlotsButton = new Button("Define Time Slots");
+        timeSlotsButton.setOnAction(e -> stage.setScene(TimeSlotsPage.createScene(stage)));
+
+        Button coursesButton = new Button("Define Courses");
+        coursesButton.setOnAction(e -> stage.setScene(CoursesPage.createScene(stage)));
+
+        // Button container
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(homeButton, timeSlotsButton, coursesButton);
+
         // Add all components to the main layout
-        layout.getChildren().addAll(titleLabel, tableView, datePicker, homeButton);
+        layout.getChildren().addAll(titleLabel, tableView, datePicker, buttonBox);
 
         return new Scene(layout, 1250, 750);
     }

@@ -6,8 +6,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -103,12 +103,21 @@ public class HomePage {
                 showAlert("Success", "Data saved successfully!");
             }
         });
-        pane.add(saveButton, 0, 5);
 
-        // Back Button
+        // Navigation Buttons
         Button backButton = new Button("Back to Landing Page");
         backButton.setOnAction(e -> stage.setScene(LandingPage.createScene(stage)));
-        pane.add(backButton, 1, 5);
+
+        Button timeSlotsButton = new Button("Define Time Slots");
+        timeSlotsButton.setOnAction(e -> stage.setScene(TimeSlotsPage.createScene(stage)));
+
+        Button coursesButton = new Button("Define Courses");
+        coursesButton.setOnAction(e -> stage.setScene(CoursesPage.createScene(stage)));
+
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(saveButton, backButton, timeSlotsButton, coursesButton);
+
+        pane.add(buttonBox, 0, 5, 2, 1);
 
         return new Scene(pane, 1250, 750);
     }
