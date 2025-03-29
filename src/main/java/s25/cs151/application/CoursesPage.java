@@ -76,20 +76,17 @@ public class CoursesPage {
 
         // Table to display courses
         TableView<Course> tableView = new TableView<>();
-        tableView.setItems(courses);
-
         TableColumn<Course, String> codeCol = new TableColumn<>("Course Code");
-        codeCol.setCellValueFactory(new PropertyValueFactory<>("code"));
-        codeCol.setSortType(TableColumn.SortType.DESCENDING);
-
         TableColumn<Course, String> nameCol = new TableColumn<>("Course Name");
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-
         TableColumn<Course, String> sectionCol = new TableColumn<>("Section Number");
+
+        codeCol.setCellValueFactory(new PropertyValueFactory<>("code"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         sectionCol.setCellValueFactory(new PropertyValueFactory<>("section"));
 
         tableView.getColumns().addAll(codeCol, nameCol, sectionCol);
-        tableView.getSortOrder().add(codeCol);
+
+        tableView.setItems(courses);
 
         // Save button
         Button saveButton = new Button("Save All Courses");
@@ -103,6 +100,11 @@ public class CoursesPage {
 
         // Load existing courses
         loadCourses();
+
+        // load the courses and then sort them
+        codeCol.setSortable(true);
+        codeCol.setSortType(TableColumn.SortType.DESCENDING);
+        tableView.getSortOrder().add(codeCol);
 
         mainLayout.getChildren().addAll(titleLabel, formPane, tableView, buttonBox);
         return new Scene(mainLayout, 1250, 750);
