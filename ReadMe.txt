@@ -4,7 +4,7 @@
 # who did what:
 1. Youssef Bazzi: Made the timeslot page and saved the available time slots
 2. Kathryna Malixi: 
-3. Patrick Luong: 
+3. Patrick Luong: Made function to validate semester entry and ordered the tables
 4. Felix Vo: 
 
 

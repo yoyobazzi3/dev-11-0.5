@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Comparator;
 
 public class LandingPage {
     public static Scene createScene(Stage stage) {
@@ -51,6 +52,16 @@ public class LandingPage {
 
         tableView.getColumns().setAll(semesterCol, yearCol, daysCol);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // This section sorts the tables
+        yearCol.setSortable(true);
+        // semesterCol.setSortable(true);
+
+        yearCol.setSortType(TableColumn.SortType.DESCENDING);
+        // semesterCol.setSortType(TableColumn.SortType.DESCENDING);
+
+        tableView.getSortOrder().add(yearCol);
+        // tableView.getSortOrder().add(semesterCol);
     }
 
     private static void refreshTableData(TableView<OfficeHoursEntry> tableView) {
@@ -79,6 +90,25 @@ public class LandingPage {
                 showAlert("Error", "Failed to load data");
             }
         }
+
+        // Define the custom order for semesters
+        Comparator<String> semesterOrder = Comparator
+                .comparingInt(s -> {
+                    switch (s) {
+                        case "Winter": return 0;
+                        case "Fall": return 1;
+                        case "Summer": return 2;
+                        case "Spring": return 3;
+                        default: return 4; // Handle unexpected values
+                    }
+                });
+
+        // Sort data by year (descending) and then by semester (custom order)
+        data.sort(Comparator
+                .comparing(OfficeHoursEntry::getYear, Comparator.reverseOrder())
+                .thenComparing(OfficeHoursEntry::getSemester, semesterOrder)
+        );
+
         tableView.setItems(data);
         tableView.refresh();
     }
