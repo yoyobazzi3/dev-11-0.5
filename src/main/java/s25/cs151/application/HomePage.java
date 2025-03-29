@@ -8,6 +8,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
@@ -84,8 +87,16 @@ public class HomePage {
     }
 
     private static boolean validateAndSave(Model model) {
-        if (model.getYear().isEmpty()) {
-            showAlert("Error", "Please enter a year");
+        if (model.getYear().length() != 4) {
+            showAlert("Error", "Please enter a 4-digit year.");
+            return false;
+        }
+        if (model.getSelectedDays().isEmpty()){
+            showAlert("Error", "Please select a day.");
+            return false;
+        }
+        if (!isDuplicate(model)) {
+            showAlert("Duplicate Entry", "This entry already exists.");
             return false;
         }
 
@@ -112,5 +123,33 @@ public class HomePage {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private static boolean isDuplicate(Model model) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("office_hours_data.csv"))) {
+            String line;
+            boolean isHeader = true;
+            while ((line = reader.readLine()) != null) {
+                if (isHeader) {
+                    // Skip the header line
+                    isHeader = false;
+                    continue;
+                }
+                // Split CSV line into components
+                String[] parts = line.split(",");
+
+                // Check duplicates of only semester and year combinations
+                String semester = parts[0];
+                String year = parts[1];
+
+                if (model.getSemester().equals(semester) && model.getYear().equals(year)){
+                    return false;
+                }
+            }
+        } catch (IOException e) {
+            Label errorLabel = new Label("Duplicate Entry.");
+            errorLabel.setStyle("-fx-font-size: 16px;");
+        }
+        return true;
     }
 }
