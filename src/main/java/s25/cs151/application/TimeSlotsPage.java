@@ -81,17 +81,16 @@ public class TimeSlotsPage {
 
         // Table to display time slots
         TableView<TimeSlot> tableView = new TableView<>();
-        tableView.setItems(timeSlots);
 
         TableColumn<TimeSlot, String> fromCol = new TableColumn<>("From Hour");
-        fromCol.setCellValueFactory(new PropertyValueFactory<>("fromTime"));
-        fromCol.setSortType(TableColumn.SortType.ASCENDING);
-
         TableColumn<TimeSlot, String> toCol = new TableColumn<>("To Hour");
+
+        fromCol.setCellValueFactory(new PropertyValueFactory<>("fromTime"));
         toCol.setCellValueFactory(new PropertyValueFactory<>("toTime"));
 
         tableView.getColumns().addAll(fromCol, toCol);
-        tableView.getSortOrder().add(fromCol);
+
+        tableView.setItems(timeSlots);
 
         // Save button
         Button saveButton = new Button("Save All Time Slots");
@@ -105,6 +104,11 @@ public class TimeSlotsPage {
 
         // Load existing time slots
         loadTimeSlots();
+
+        // load the time slots and them sort them
+        fromCol.setSortable(true);
+        fromCol.setSortType(TableColumn.SortType.ASCENDING);
+        tableView.getSortOrder().add(fromCol);
 
         mainLayout.getChildren().addAll(titleLabel, formPane, tableView, buttonBox);
         return new Scene(mainLayout, 1250, 750);
