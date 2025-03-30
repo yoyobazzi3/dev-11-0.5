@@ -6,11 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="73d45499-7ed0-41b7-b6e3-4d72e0a54fa3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/office_hours_data.csv" beforeDir="false" afterPath="$PROJECT_DIR$/office_hours_data.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/HomePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/HomePage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/LandingPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/LandingPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/CoursesPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/CoursesPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/TimeSlotsPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/TimeSlotsPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/s25/cs151/application/HomePage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/s25/cs151/application/HomePage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/s25/cs151/application/CoursesPage$Course.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/s25/cs151/application/CoursesPage$Course.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/s25/cs151/application/CoursesPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/s25/cs151/application/CoursesPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/s25/cs151/application/TimeSlotsPage$TimeSlot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/s25/cs151/application/TimeSlotsPage$TimeSlot.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/s25/cs151/application/TimeSlotsPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/s25/cs151/application/TimeSlotsPage.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,9 +41,9 @@
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;yb-v-0.5&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/youssefbazzi/Downloads/dev-11-0.5&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/youssefbazzi/dev-11-0.5&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -51,6 +52,14 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="dev-11-0.5" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -76,6 +85,9 @@
       <workItem from="1743191117424" duration="321000" />
       <workItem from="1743193953839" duration="321000" />
       <workItem from="1743194278077" duration="1056000" />
+      <workItem from="1743196265388" duration="102000" />
+      <workItem from="1743279691734" duration="71000" />
+      <workItem from="1743279764976" duration="2161000" />
     </task>
     <servers />
   </component>

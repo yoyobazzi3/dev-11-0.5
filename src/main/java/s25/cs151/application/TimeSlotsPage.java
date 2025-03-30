@@ -12,6 +12,7 @@ import java.io.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Comparator;
 
 public class TimeSlotsPage {
     private static ObservableList<TimeSlot> timeSlots = FXCollections.observableArrayList();
@@ -67,6 +68,7 @@ public class TimeSlotsPage {
                 }
 
                 timeSlots.add(new TimeSlot(fromTime, toTime));
+                timeSlots.sort(Comparator.comparing(slot -> LocalTime.parse(slot.getFromTime(), TIME_FORMATTER)));
 
             } catch (DateTimeParseException ex) {
                 showAlert("Invalid Time", "Please enter valid times in HH:MM format.");
@@ -85,13 +87,11 @@ public class TimeSlotsPage {
 
         TableColumn<TimeSlot, String> fromCol = new TableColumn<>("From Hour");
         fromCol.setCellValueFactory(new PropertyValueFactory<>("fromTime"));
-        fromCol.setSortType(TableColumn.SortType.ASCENDING);
 
         TableColumn<TimeSlot, String> toCol = new TableColumn<>("To Hour");
         toCol.setCellValueFactory(new PropertyValueFactory<>("toTime"));
 
         tableView.getColumns().addAll(fromCol, toCol);
-        tableView.getSortOrder().add(fromCol);
 
         // Save button
         Button saveButton = new Button("Save All Time Slots");
@@ -105,6 +105,7 @@ public class TimeSlotsPage {
 
         // Load existing time slots
         loadTimeSlots();
+        timeSlots.sort(Comparator.comparing(slot -> LocalTime.parse(slot.getFromTime(), TIME_FORMATTER)));
 
         mainLayout.getChildren().addAll(titleLabel, formPane, tableView, buttonBox);
         return new Scene(mainLayout, 1250, 750);

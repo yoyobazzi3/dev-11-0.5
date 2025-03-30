@@ -9,6 +9,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.*;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -53,7 +55,7 @@ public class CoursesPage {
                 return;
             }
 
-            String key = code + "-" + name + "-" + section;
+            String key = (code + "-" + name + "-" + section).toLowerCase();
             if (courseKeys.contains(key)) {
                 showAlert("Error", "This course combination already exists.");
                 return;
@@ -61,6 +63,7 @@ public class CoursesPage {
 
             courses.add(new Course(code, name, section));
             courseKeys.add(key);
+            sortCoursesDescending();
             codeField.clear();
             nameField.clear();
             sectionField.clear();
@@ -80,7 +83,6 @@ public class CoursesPage {
 
         TableColumn<Course, String> codeCol = new TableColumn<>("Course Code");
         codeCol.setCellValueFactory(new PropertyValueFactory<>("code"));
-        codeCol.setSortType(TableColumn.SortType.DESCENDING);
 
         TableColumn<Course, String> nameCol = new TableColumn<>("Course Name");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -89,7 +91,6 @@ public class CoursesPage {
         sectionCol.setCellValueFactory(new PropertyValueFactory<>("section"));
 
         tableView.getColumns().addAll(codeCol, nameCol, sectionCol);
-        tableView.getSortOrder().add(codeCol);
 
         // Save button
         Button saveButton = new Button("Save All Courses");
@@ -103,9 +104,14 @@ public class CoursesPage {
 
         // Load existing courses
         loadCourses();
+        sortCoursesDescending();
 
         mainLayout.getChildren().addAll(titleLabel, formPane, tableView, buttonBox);
         return new Scene(mainLayout, 1250, 750);
+    }
+
+    private static void sortCoursesDescending() {
+        FXCollections.sort(courses, Comparator.comparing(Course::getCode).reversed());
     }
 
     private static void saveCourses() {
@@ -134,7 +140,7 @@ public class CoursesPage {
                         String name = parts[1];
                         String section = parts[2];
                         courses.add(new Course(code, name, section));
-                        courseKeys.add(code + "-" + name + "-" + section);
+                        courseKeys.add((code + "-" + name + "-" + section).toLowerCase());
                     }
                 }
             } catch (IOException e) {
