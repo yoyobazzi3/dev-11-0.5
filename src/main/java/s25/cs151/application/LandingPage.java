@@ -8,13 +8,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+
+import java.io.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 
 public class LandingPage {
+
     public static Scene createScene(Stage stage) {
         VBox layout = new VBox(20);
         layout.setPadding(new Insets(20));
@@ -22,10 +23,10 @@ public class LandingPage {
         Label titleLabel = new Label("Office Hours Manager");
         titleLabel.setStyle("-fx-font-size: 24px;");
 
-        // Table Setup
-        TableView<OfficeHoursEntry> tableView = new TableView<>();
-        setupTableView(tableView);
-        refreshTableData(tableView);
+        // Scheduled Office Hours Table
+        TableView<ScheduledEntry> scheduledTableView = new TableView<>();
+        setupScheduledTableView(scheduledTableView);
+        refreshScheduledData(scheduledTableView);
 
         // Navigation Buttons
         HBox buttonBox = new HBox(10);
@@ -33,54 +34,66 @@ public class LandingPage {
                 createNavButton("Define Semester", () -> stage.setScene(HomePage.createScene(stage))),
                 createNavButton("Define Time Slots", () -> stage.setScene(TimeSlotsPage.createScene(stage))),
                 createNavButton("Define Courses", () -> stage.setScene(CoursesPage.createScene(stage))),
-                createRefreshButton(tableView)
+                createNavButton("Schedule Office Hours", () -> stage.setScene(ScheduleOfficeHoursPage.createScene(stage))),
+                createRefreshButton(scheduledTableView)
         );
 
-        layout.getChildren().addAll(titleLabel, tableView, new DatePicker(LocalDate.now()), buttonBox);
+        layout.getChildren().addAll(
+                titleLabel,
+                new Label("\u23F0 Scheduled Office Hours:"),
+                scheduledTableView,
+                new DatePicker(LocalDate.now()),
+                buttonBox
+        );
+
         return new Scene(layout, 1250, 750);
     }
 
-    private static void setupTableView(TableView<OfficeHoursEntry> tableView) {
-        TableColumn<OfficeHoursEntry, String> semesterCol = new TableColumn<>("Semester");
-        TableColumn<OfficeHoursEntry, String> yearCol = new TableColumn<>("Year");
-        TableColumn<OfficeHoursEntry, String> daysCol = new TableColumn<>("Days");
+    private static void setupScheduledTableView(TableView<ScheduledEntry> tableView) {
+        TableColumn<ScheduledEntry, String> studentCol = new TableColumn<>("Student Name");
+        TableColumn<ScheduledEntry, String> dateCol = new TableColumn<>("Date");
+        TableColumn<ScheduledEntry, String> timeCol = new TableColumn<>("Time Slot");
+        TableColumn<ScheduledEntry, String> courseCol = new TableColumn<>("Course");
+        TableColumn<ScheduledEntry, String> reasonCol = new TableColumn<>("Reason");
+        TableColumn<ScheduledEntry, String> commentCol = new TableColumn<>("Comment");
 
-        semesterCol.setCellValueFactory(new PropertyValueFactory<>("semester"));
-        yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
-        daysCol.setCellValueFactory(new PropertyValueFactory<>("days"));
+        studentCol.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+        courseCol.setCellValueFactory(new PropertyValueFactory<>("course"));
+        reasonCol.setCellValueFactory(new PropertyValueFactory<>("reason"));
+        commentCol.setCellValueFactory(new PropertyValueFactory<>("comment"));
 
-        tableView.getColumns().setAll(semesterCol, yearCol, daysCol);
+        tableView.getColumns().setAll(studentCol, dateCol, timeCol, courseCol, reasonCol, commentCol);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    private static void refreshTableData(TableView<OfficeHoursEntry> tableView) {
-        ObservableList<OfficeHoursEntry> data = FXCollections.observableArrayList();
-        File file = new File("office_hours_data.csv");
+    private static void refreshScheduledData(TableView<ScheduledEntry> tableView) {
+        ObservableList<ScheduledEntry> data = FXCollections.observableArrayList();
+        File file = new File("scheduled_office_hours.csv");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         if (file.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 String line;
-                boolean headerSkipped = false;
                 while ((line = reader.readLine()) != null) {
-                    if (!headerSkipped) {
-                        headerSkipped = true;
-                        continue;
-                    }
                     String[] parts = line.split(",");
-                    if (parts.length >= 3) {
-                        data.add(new OfficeHoursEntry(
-                                parts[0],
-                                parts[1],
-                                parts[2].replace(";", ", ")
-                        ));
+                    if (parts.length >= 4) {
+                        String reason = parts.length > 4 ? parts[4] : "";
+                        String comment = parts.length > 5 ? parts[5] : "";
+                        data.add(new ScheduledEntry(parts[0], parts[1], parts[2], parts[3], reason, comment));
                     }
                 }
             } catch (IOException e) {
-                showAlert("Error", "Failed to load data");
+                showAlert("Error", "Failed to load scheduled data");
             }
         }
+
+        data.sort(Comparator
+                .comparing((ScheduledEntry e) -> LocalDate.parse(e.getDate(), formatter))
+                .thenComparing(ScheduledEntry::getTime));
+
         tableView.setItems(data);
-        tableView.refresh();
     }
 
     private static Button createNavButton(String text, Runnable action) {
@@ -89,9 +102,9 @@ public class LandingPage {
         return button;
     }
 
-    private static Button createRefreshButton(TableView<OfficeHoursEntry> tableView) {
+    private static Button createRefreshButton(TableView<ScheduledEntry> scheduledTable) {
         Button button = new Button("Refresh");
-        button.setOnAction(e -> refreshTableData(tableView));
+        button.setOnAction(e -> refreshScheduledData(scheduledTable));
         return button;
     }
 
@@ -103,19 +116,23 @@ public class LandingPage {
         alert.showAndWait();
     }
 
-    public static class OfficeHoursEntry {
-        private final String semester;
-        private final String year;
-        private final String days;
+    public static class ScheduledEntry {
+        private final String studentName, date, time, course, reason, comment;
 
-        public OfficeHoursEntry(String semester, String year, String days) {
-            this.semester = semester;
-            this.year = year;
-            this.days = days;
+        public ScheduledEntry(String studentName, String date, String time, String course, String reason, String comment) {
+            this.studentName = studentName;
+            this.date = date;
+            this.time = time;
+            this.course = course;
+            this.reason = reason;
+            this.comment = comment;
         }
 
-        public String getSemester() { return semester; }
-        public String getYear() { return year; }
-        public String getDays() { return days; }
+        public String getStudentName() { return studentName; }
+        public String getDate() { return date; }
+        public String getTime() { return time; }
+        public String getCourse() { return course; }
+        public String getReason() { return reason; }
+        public String getComment() { return comment; }
     }
 }
