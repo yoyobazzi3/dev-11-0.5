@@ -60,8 +60,9 @@ public class ScheduleOfficeHoursPage {
                 return;
             }
 
-            entries.add(new ScheduledOfficeHour(studentName, date.toString(), time, course, reason, comment));
-            saveSchedule();
+            ScheduledOfficeHour newEntry = new ScheduledOfficeHour(studentName, date.toString(), time, course, reason, comment);
+            entries.add(newEntry);
+            saveSchedule(newEntry);
             showAlert("Success", "Office hour scheduled successfully!");
         });
 
@@ -126,11 +127,11 @@ public class ScheduleOfficeHoursPage {
         }
     }
 
-    private static void saveSchedule() {
+    private static void saveSchedule(ScheduledOfficeHour s) {
         try (PrintWriter writer = new PrintWriter(new FileWriter("scheduled_office_hours.csv", true))) {
-            for (ScheduledOfficeHour s : entries) {
+            //for (ScheduledOfficeHour s : entries) {
                 writer.println(s.getStudentName() + "," + s.getDate() + "," + s.getTime() + "," + s.getCourse() + "," + s.getReason() + "," + s.getComment());
-            }
+            //}
         } catch (IOException e) {
             showAlert("Error", "Failed to save schedule");
         }
