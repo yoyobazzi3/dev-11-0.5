@@ -16,6 +16,10 @@ import java.util.Comparator;
 
 public class LandingPage {
 
+    private static ObservableList<ScheduledEntry> allEntries = FXCollections.observableArrayList();
+    private static ObservableList<ScheduledEntry> filteredEntries = FXCollections.observableArrayList();
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     public static Scene createScene(Stage stage) {
         VBox layout = new VBox(20);
         layout.setPadding(new Insets(20));
@@ -23,15 +27,29 @@ public class LandingPage {
         Label titleLabel = new Label("Office Hours Manager");
         titleLabel.setStyle("-fx-font-size: 24px;");
 
-        // Scheduled Office Hours Table
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search by student name...");
+
         TableView<ScheduledEntry> scheduledTableView = new TableView<>();
         setupScheduledTableView(scheduledTableView);
         refreshScheduledData(scheduledTableView);
 
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> searchAndUpdate(newVal));
+
+        Button deleteButton = new Button("Delete Selected");
+        deleteButton.setOnAction(e -> {
+            ScheduledEntry selected = scheduledTableView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                allEntries.remove(selected);
+                filteredEntries.remove(selected);
+                saveToCSV();
+            }
+        });
+
         // Navigation Buttons
         HBox buttonBox = new HBox(10);
         buttonBox.getChildren().addAll(
-                createNavButton("Define Semester", () -> stage.setScene(HomePage.createScene(stage))),
+                createNavButton("Define Semester", () -> stage.setScene(DefineSemesterOfficeHours.createScene(stage))),
                 createNavButton("Define Time Slots", () -> stage.setScene(TimeSlotsPage.createScene(stage))),
                 createNavButton("Define Courses", () -> stage.setScene(CoursesPage.createScene(stage))),
                 createNavButton("Schedule Office Hours", () -> stage.setScene(ScheduleOfficeHoursPage.createScene(stage))),
@@ -40,8 +58,10 @@ public class LandingPage {
 
         layout.getChildren().addAll(
                 titleLabel,
+                searchField,
                 new Label("\u23F0 Scheduled Office Hours:"),
                 scheduledTableView,
+                deleteButton,
                 new DatePicker(LocalDate.now()),
                 buttonBox
         );
@@ -65,23 +85,24 @@ public class LandingPage {
         commentCol.setCellValueFactory(new PropertyValueFactory<>("comment"));
 
         tableView.getColumns().setAll(studentCol, dateCol, timeCol, courseCol, reasonCol, commentCol);
+        tableView.setItems(filteredEntries);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     private static void refreshScheduledData(TableView<ScheduledEntry> tableView) {
-        ObservableList<ScheduledEntry> data = FXCollections.observableArrayList();
+        allEntries.clear();
+        filteredEntries.clear();
         File file = new File("scheduled_office_hours.csv");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         if (file.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(",");
+                    String[] parts = line.split(",", -1);
                     if (parts.length >= 4) {
                         String reason = parts.length > 4 ? parts[4] : "";
                         String comment = parts.length > 5 ? parts[5] : "";
-                        data.add(new ScheduledEntry(parts[0], parts[1], parts[2], parts[3], reason, comment));
+                        allEntries.add(new ScheduledEntry(parts[0], parts[1], parts[2], parts[3], reason, comment));
                     }
                 }
             } catch (IOException e) {
@@ -89,11 +110,30 @@ public class LandingPage {
             }
         }
 
-        data.sort(Comparator
-                .comparing((ScheduledEntry e) -> LocalDate.parse(e.getDate(), formatter))
-                .thenComparing(ScheduledEntry::getTime));
+        searchAndUpdate("");
+    }
 
-        tableView.setItems(data);
+    private static void searchAndUpdate(String keyword) {
+        String lower = keyword.toLowerCase();
+        filteredEntries.setAll(
+                allEntries.stream()
+                        .filter(e -> e.getStudentName().toLowerCase().contains(lower))
+                        .sorted(Comparator
+                                .comparing((ScheduledEntry e) -> LocalDate.parse(e.getDate(), formatter)).reversed()
+                                .thenComparing(ScheduledEntry::getTime).reversed())
+                        .toList()
+        );
+    }
+
+    private static void saveToCSV() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("scheduled_office_hours.csv"))) {
+            for (ScheduledEntry entry : allEntries) {
+                writer.println(String.join(",", entry.getStudentName(), entry.getDate(), entry.getTime(),
+                        entry.getCourse(), entry.getReason(), entry.getComment()));
+            }
+        } catch (IOException e) {
+            showAlert("Error", "Failed to save data");
+        }
     }
 
     private static Button createNavButton(String text, Runnable action) {

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HomePage {
+public class DefineSemesterOfficeHours {
     private static Model model = new Model();
     private static final String CSV_FILE = "office_hours_data.csv";
 

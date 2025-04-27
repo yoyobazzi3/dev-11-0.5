@@ -60,8 +60,16 @@ public class ScheduleOfficeHoursPage {
                 return;
             }
 
-            entries.add(new ScheduledOfficeHour(studentName, date.toString(), time, course, reason, comment));
-            saveSchedule();
+            // ❌ Check for overlapping entries (both in-session and in CSV)
+            if (hasConflict(date.toString(), time, course)) {
+                showAlert("Conflict Detected", "This course already has office hours scheduled at that time and date.");
+                return;
+            }
+
+            ScheduledOfficeHour newEntry = new ScheduledOfficeHour(studentName, date.toString(), time, course, reason, comment);
+            entries.add(newEntry);
+            saveLatestSchedule(newEntry);
+            entries.clear();
             showAlert("Success", "Office hour scheduled successfully!");
         });
 
@@ -81,7 +89,7 @@ public class ScheduleOfficeHoursPage {
                 back
         );
 
-        loadSchedule();
+        loadSchedule(); // Load existing to check for overlaps
 
         return new Scene(layout, 1250, 750);
     }
@@ -126,11 +134,10 @@ public class ScheduleOfficeHoursPage {
         }
     }
 
-    private static void saveSchedule() {
+    private static void saveLatestSchedule(ScheduledOfficeHour latest) {
         try (PrintWriter writer = new PrintWriter(new FileWriter("scheduled_office_hours.csv", true))) {
-            for (ScheduledOfficeHour s : entries) {
-                writer.println(s.getStudentName() + "," + s.getDate() + "," + s.getTime() + "," + s.getCourse() + "," + s.getReason() + "," + s.getComment());
-            }
+            writer.println(latest.getStudentName() + "," + latest.getDate() + "," + latest.getTime() + "," +
+                    latest.getCourse() + "," + latest.getReason() + "," + latest.getComment());
         } catch (IOException e) {
             showAlert("Error", "Failed to save schedule");
         }
@@ -143,7 +150,7 @@ public class ScheduleOfficeHoursPage {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line;
                 while ((line = br.readLine()) != null) {
-                    String[] parts = line.split(",");
+                    String[] parts = line.split(",", -1);
                     if (parts.length >= 4) {
                         String reason = parts.length > 4 ? parts[4] : "";
                         String comment = parts.length > 5 ? parts[5] : "";
@@ -154,6 +161,14 @@ public class ScheduleOfficeHoursPage {
                 showAlert("Error", "Failed to load schedule");
             }
         }
+    }
+
+    private static boolean hasConflict(String date, String time, String course) {
+        return entries.stream().anyMatch(entry ->
+                entry.getDate().equals(date) &&
+                        entry.getTime().equals(time) &&
+                        entry.getCourse().equals(course)
+        );
     }
 
     private static void showAlert(String title, String msg) {
