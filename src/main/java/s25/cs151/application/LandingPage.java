@@ -12,13 +12,14 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 
 public class LandingPage {
 
     private static ObservableList<ScheduledEntry> allEntries = FXCollections.observableArrayList();
     private static ObservableList<ScheduledEntry> filteredEntries = FXCollections.observableArrayList();
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter storageFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static Scene createScene(Stage stage) {
         VBox layout = new VBox(20);
@@ -46,7 +47,6 @@ public class LandingPage {
             }
         });
 
-        // Navigation Buttons
         HBox buttonBox = new HBox(10);
         buttonBox.getChildren().addAll(
                 createNavButton("Define Semester", () -> stage.setScene(DefineSemesterOfficeHours.createScene(stage))),
@@ -102,7 +102,9 @@ public class LandingPage {
                     if (parts.length >= 4) {
                         String reason = parts.length > 4 ? parts[4] : "";
                         String comment = parts.length > 5 ? parts[5] : "";
-                        allEntries.add(new ScheduledEntry(parts[0], parts[1], parts[2], parts[3], reason, comment));
+                        // 🔥 Fix time automatically by replacing long dash with normal dash
+                        String fixedTime = parts[2].replace("–", "-").trim();
+                        allEntries.add(new ScheduledEntry(parts[0], parts[1], fixedTime, parts[3], reason, comment));
                     }
                 }
             } catch (IOException e) {
@@ -119,8 +121,14 @@ public class LandingPage {
                 allEntries.stream()
                         .filter(e -> e.getStudentName().toLowerCase().contains(lower))
                         .sorted(Comparator
-                                .comparing((ScheduledEntry e) -> LocalDate.parse(e.getDate(), formatter)).reversed()
-                                .thenComparing(ScheduledEntry::getTime).reversed())
+                                .comparing((ScheduledEntry e) -> {
+                                    try {
+                                        return LocalDate.parse(e.getDate(), storageFormatter);
+                                    } catch (DateTimeParseException ex) {
+                                        return LocalDate.MIN;
+                                    }
+                                })
+                                .reversed()) // ✅ Newest dates first
                         .toList()
         );
     }
