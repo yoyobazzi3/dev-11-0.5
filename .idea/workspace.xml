@@ -6,8 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="73d45499-7ed0-41b7-b6e3-4d72e0a54fa3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/LandingPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/LandingPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/ScheduleOfficeHoursPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/ScheduleOfficeHoursPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/CoursesPage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/DefineSemesterOfficeHours.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/LandingPage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/MainController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/Model.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/ScheduleOfficeHoursPage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/TimeSlotsPage.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +54,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/s25/cs151/application" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="dev-11-0.5" />
@@ -91,7 +102,8 @@
       <workItem from="1745539592959" duration="1389000" />
       <workItem from="1745721769820" duration="490000" />
       <workItem from="1745722269232" duration="2762000" />
-      <workItem from="1746252084308" duration="40000" />
+      <workItem from="1746252084308" duration="2259000" />
+      <workItem from="1746299682726" duration="105000" />
     </task>
     <servers />
   </component>
