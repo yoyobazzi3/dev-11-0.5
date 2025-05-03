@@ -47,6 +47,19 @@ public class LandingPage {
             }
         });
 
+        Button editButton = new Button("Edit Selected");
+        editButton.setOnAction(e -> {
+            ScheduledEntry selected = scheduledTableView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                ScheduleOfficeHoursPage.ScheduledOfficeHour editable = new ScheduleOfficeHoursPage.ScheduledOfficeHour(
+                        selected.getStudentName(), selected.getDate(), selected.getTime(), selected.getCourse(),
+                        selected.getReason(), selected.getComment()
+                );
+
+                stage.setScene(ScheduleOfficeHoursPage.createScene(stage, editable, () -> refreshScheduledData(scheduledTableView)));
+            }
+        });
+
         HBox buttonBox = new HBox(10);
         buttonBox.getChildren().addAll(
                 createNavButton("Define Semester", () -> stage.setScene(DefineSemesterOfficeHours.createScene(stage))),
@@ -61,7 +74,7 @@ public class LandingPage {
                 searchField,
                 new Label("\u23F0 Scheduled Office Hours:"),
                 scheduledTableView,
-                deleteButton,
+                new HBox(10, deleteButton, editButton),
                 new DatePicker(LocalDate.now()),
                 buttonBox
         );
@@ -102,7 +115,6 @@ public class LandingPage {
                     if (parts.length >= 4) {
                         String reason = parts.length > 4 ? parts[4] : "";
                         String comment = parts.length > 5 ? parts[5] : "";
-                        // 🔥 Fix time automatically by replacing long dash with normal dash
                         String fixedTime = parts[2].replace("–", "-").trim();
                         allEntries.add(new ScheduledEntry(parts[0], parts[1], fixedTime, parts[3], reason, comment));
                     }
@@ -128,7 +140,7 @@ public class LandingPage {
                                         return LocalDate.MIN;
                                     }
                                 })
-                                .reversed()) // ✅ Newest dates first
+                                .reversed())
                         .toList()
         );
     }

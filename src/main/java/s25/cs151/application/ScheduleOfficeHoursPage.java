@@ -10,43 +10,47 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.util.function.Consumer;
 
 public class ScheduleOfficeHoursPage {
     private static ObservableList<ScheduledOfficeHour> entries = FXCollections.observableArrayList();
 
     public static Scene createScene(Stage stage) {
+        return createScene(stage, null, null);
+    }
+
+    public static Scene createScene(Stage stage, ScheduledOfficeHour existingEntry, Runnable onSaveCallback) {
         VBox layout = new VBox(20);
         layout.setPadding(new Insets(20));
-        Label title = new Label("Schedule Office Hours");
+        Label title = new Label(existingEntry == null ? "Schedule Office Hours" : "Edit Office Hours");
         title.setStyle("-fx-font-size: 24px;");
 
-        // Student Name
         TextField studentNameField = new TextField();
         studentNameField.setPromptText("Enter student's full name");
+        if (existingEntry != null) studentNameField.setText(existingEntry.getStudentName());
 
-        // Date picker (default today)
         DatePicker datePicker = new DatePicker(LocalDate.now());
+        if (existingEntry != null) datePicker.setValue(LocalDate.parse(existingEntry.getDate()));
 
-        // Time Slot Dropdown
         ComboBox<String> timeSlotDropdown = new ComboBox<>();
         timeSlotDropdown.setPromptText("Select a time slot");
         loadTimeSlots(timeSlotDropdown);
+        if (existingEntry != null) timeSlotDropdown.setValue(existingEntry.getTime());
 
-        // Course Dropdown (show code and section only)
         ComboBox<String> courseDropdown = new ComboBox<>();
         courseDropdown.setPromptText("Select a course");
         loadCourses(courseDropdown);
+        if (existingEntry != null) courseDropdown.setValue(existingEntry.getCourse());
 
-        // Reason (optional)
         TextField reasonField = new TextField();
         reasonField.setPromptText("Reason (optional)");
+        if (existingEntry != null) reasonField.setText(existingEntry.getReason());
 
-        // Comment (optional)
         TextField commentField = new TextField();
         commentField.setPromptText("Comment (optional)");
+        if (existingEntry != null) commentField.setText(existingEntry.getComment());
 
-        // Save button
-        Button saveBtn = new Button("Save Schedule");
+        Button saveBtn = new Button(existingEntry == null ? "Save Schedule" : "Save Changes");
         saveBtn.setOnAction(e -> {
             String studentName = studentNameField.getText().trim();
             LocalDate date = datePicker.getValue();
@@ -60,20 +64,51 @@ public class ScheduleOfficeHoursPage {
                 return;
             }
 
-            // ❌ Check for overlapping entries (both in-session and in CSV)
-            if (hasConflict(date.toString(), time, course)) {
+            if (existingEntry == null && hasConflict(date.toString(), time, course)) {
                 showAlert("Conflict Detected", "This course already has office hours scheduled at that time and date.");
                 return;
             }
 
             ScheduledOfficeHour newEntry = new ScheduledOfficeHour(studentName, date.toString(), time, course, reason, comment);
-            entries.add(newEntry);
-            saveLatestSchedule(newEntry);
+
+            if (existingEntry != null) {
+                File file = new File("scheduled_office_hours.csv");
+                File temp = new File("temp.csv");
+
+                try (
+                        BufferedReader reader = new BufferedReader(new FileReader(file));
+                        PrintWriter writer = new PrintWriter(new FileWriter(temp))
+                ) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String[] parts = line.split(",", -1);
+                        if (parts.length >= 4 &&
+                                !(parts[0].equals(existingEntry.getStudentName()) &&
+                                        parts[1].equals(existingEntry.getDate()) &&
+                                        parts[2].equals(existingEntry.getTime()) &&
+                                        parts[3].equals(existingEntry.getCourse()))) {
+                            writer.println(line);
+                        }
+                    }
+                    writer.println(String.join(",", studentName, date.toString(), time, course, reason, comment));
+                } catch (IOException ex) {
+                    showAlert("Error", "Failed to save edited schedule.");
+                }
+
+                file.delete();
+                temp.renameTo(file);
+                showAlert("Success", "Schedule updated!");
+            } else {
+                entries.add(newEntry);
+                saveLatestSchedule(newEntry);
+                showAlert("Success", "Office hour scheduled successfully!");
+            }
+
             entries.clear();
-            showAlert("Success", "Office hour scheduled successfully!");
+            if (onSaveCallback != null) onSaveCallback.run();
+            stage.setScene(LandingPage.createScene(stage));
         });
 
-        // Back button
         Button back = new Button("Back");
         back.setOnAction(e -> stage.setScene(LandingPage.createScene(stage)));
 
@@ -89,7 +124,7 @@ public class ScheduleOfficeHoursPage {
                 back
         );
 
-        loadSchedule(); // Load existing to check for overlaps
+        loadSchedule();
 
         return new Scene(layout, 1250, 750);
     }
@@ -102,11 +137,8 @@ public class ScheduleOfficeHoursPage {
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(",");
                     if (parts.length >= 3) {
-                        comboBox.getItems().add(parts[0] + "-" + parts[2]); // e.g., CS151-04
+                        comboBox.getItems().add(parts[0] + "-" + parts[2]);
                     }
-                }
-                if (!comboBox.getItems().isEmpty()) {
-                    comboBox.setValue(comboBox.getItems().get(0));
                 }
             } catch (IOException e) {
                 showAlert("Error", "Failed to load courses");
@@ -124,9 +156,6 @@ public class ScheduleOfficeHoursPage {
                     if (parts.length == 2) {
                         comboBox.getItems().add(parts[0] + " – " + parts[1]);
                     }
-                }
-                if (!comboBox.getItems().isEmpty()) {
-                    comboBox.setValue(comboBox.getItems().get(0));
                 }
             } catch (IOException e) {
                 showAlert("Error", "Failed to load time slots");
