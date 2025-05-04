@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="73d45499-7ed0-41b7-b6e3-4d72e0a54fa3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/model/BaseEntry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scheduled_office_hours.csv" beforeDir="false" afterPath="$PROJECT_DIR$/scheduled_office_hours.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/view/LandingView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/view/LandingView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/s25/cs151/application/model/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/s25/cs151/application/model/Course.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +37,7 @@
     "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "fix",
+    "git-widget-placeholder": "polymormphism",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/youssefbazzi/dev-11-0.5",
     "node.js.detected.package.eslint": "true",
